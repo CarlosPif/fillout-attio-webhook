@@ -1,13 +1,12 @@
 {
-  "name": "fillout-attio-webhook",
+  "name": "attio-webhook-railway",
   "version": "1.0.0",
-  "description": "Webhook para conectar Fillout con Attio",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vercel dev"
+    "start": "node index.js"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "vercel": "^33.0.0"
+  "dependencies": {
+    "express": "^4.19.0"
   }
 }
