@@ -35,8 +35,6 @@ app.post("/webhook", async (req, res) => {
       );
     }
 
-    const filloutData = req.body;
-
     // 👇 aquí pillamos directamente submission.questions
     const submission = filloutData.submission || {};
     const responses = Array.isArray(submission.questions)
