@@ -13,7 +13,7 @@ const ATTIO_API_KEY = process.env.ATTIO_API_KEY;
 const ATTIO_LIST_ID = "e2f1f046-d64f-4b4a-8e90-25b7c10140ba";
 
 const FILLOUT_FIELD_MAPPINGS = {
-  wrV6: "hdd_evaluation_1",
+  "wrV6": "hdd_evaluation_1",
   "6rxp": "hdd_evaluation_2",
 };
 
