@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.post("/webhook", async (req, res) => {
   console.log("🔔 Webhook recibido - método:", req.method);
+  console.log("📦 Body bruto recibido desde Fillout:", JSON.stringify(req.body, null, 2));
 
   try {
     const filloutData = req.body;
@@ -34,7 +35,38 @@ app.post("/webhook", async (req, res) => {
       );
     }
 
-    const responses = filloutData.questions || [];
+    // 👇 NUEVO: detectar el array de preguntas según el formato real
+    let responses = [];
+
+    if (Array.isArray(filloutData.questions)) {
+      // Formato plano: { questions: [...] }
+      responses = filloutData.questions;
+    } else if (
+      Array.isArray(filloutData.responses) &&
+      filloutData.responses.length > 0 &&
+      Array.isArray(filloutData.responses[0].questions)
+    ) {
+      // Formato tipo API: { responses: [ { questions: [...] } ] }
+      responses = filloutData.responses[0].questions;
+    } else if (
+      filloutData.response &&
+      Array.isArray(filloutData.response.questions)
+    ) {
+      // Por si viene como { response: { questions: [...] } }
+      responses = filloutData.response.questions;
+    }
+
+    if (!Array.isArray(responses) || responses.length === 0) {
+      console.warn("⚠️ No se encontraron preguntas en el payload de Fillout");
+      return res.status(400).json({
+        error: "No questions in payload",
+        message:
+          "No se encontraron preguntas en el body recibido desde Fillout. Revisa el formato del payload y el ID del campo.",
+        rawBody: filloutData,
+      });
+    }
+
+    // Buscar el dominio
     const domainQuestion = responses.find(
       (q) => q.id === FILLOUT_DOMAIN_FIELD_ID
     );
@@ -44,7 +76,11 @@ app.post("/webhook", async (req, res) => {
       return res.status(400).json({
         error: "Domain not provided",
         message: `No se encontró el campo de dominio con ID: ${FILLOUT_DOMAIN_FIELD_ID}`,
-        receivedFields: responses.map((q) => ({ id: q.id, name: q.name })),
+        receivedFields: responses.map((q) => ({
+          id: q.id,
+          name: q.name,
+          value: q.value,
+        })),
       });
     }
 
