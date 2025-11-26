@@ -11,19 +11,15 @@ export default async function handler(req, res) {
     const filloutData = req.body;
     
     // Configuración - IDs conocidos
-    const FILLOUT_DOMAIN_FIELD_ID = process.env.FILLOUT_DOMAIN_FIELD_ID;
+    const FILLOUT_DOMAIN_FIELD_ID = '6aYW';
     const ATTIO_DOMAIN_ATTRIBUTE = 'domains';
     const ATTIO_API_KEY = process.env.ATTIO_API_KEY;
     const ATTIO_LIST_ID = 'e2f1f046-d64f-4b4a-8e90-25b7c10140ba';
     
     // MAPEO DE CAMPOS: Edita aquí para mapear tus campos de Fillout a Attio
     const FILLOUT_FIELD_MAPPINGS = {
-      // Formato: 'id_campo_fillout': 'nombre_atributo_attio'
-      // Ejemplos (reemplaza con tus IDs reales):
-      // 'jks8d9f': 'contact_email',
-      // 'mne8w2q': 'phone_number',
-      // 'pol9x3r': 'status',
-      // 'abc1234': 'notes',
+      'wrV6': 'hdd_evaluation_1',
+      '6rxp': 'hdd_evaluation_2'
     };
 
     // Validar variables de entorno
