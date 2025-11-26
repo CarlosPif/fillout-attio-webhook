@@ -213,7 +213,7 @@ app.post("/webhook", async (req, res) => {
         headers: attioHeaders,
         body: JSON.stringify({
           data: {
-            values: updateData,
+            entry_values: updateData,
           },
         }),
       }
