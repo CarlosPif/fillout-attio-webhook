@@ -1,0 +1,13 @@
+{
+  "name": "fillout-attio-webhook",
+  "version": "1.0.0",
+  "description": "Webhook para conectar Fillout con Attio",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
