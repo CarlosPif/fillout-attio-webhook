@@ -35,36 +35,25 @@ app.post("/webhook", async (req, res) => {
       );
     }
 
-    // 👇 NUEVO: detectar el array de preguntas según el formato real
-    let responses = [];
+    const filloutData = req.body;
 
-    if (Array.isArray(filloutData.questions)) {
-      // Formato plano: { questions: [...] }
-      responses = filloutData.questions;
-    } else if (
-      Array.isArray(filloutData.responses) &&
-      filloutData.responses.length > 0 &&
-      Array.isArray(filloutData.responses[0].questions)
-    ) {
-      // Formato tipo API: { responses: [ { questions: [...] } ] }
-      responses = filloutData.responses[0].questions;
-    } else if (
-      filloutData.response &&
-      Array.isArray(filloutData.response.questions)
-    ) {
-      // Por si viene como { response: { questions: [...] } }
-      responses = filloutData.response.questions;
+    // 👇 aquí pillamos directamente submission.questions
+    const submission = filloutData.submission || {};
+    const responses = Array.isArray(submission.questions)
+    ? submission.questions
+    : [];
+
+
+    if (responses.length === 0) {
+        console.warn("⚠️ No se encontraron preguntas en submission.questions");
+        return res.status(400).json({
+            error: "No questions in payload",
+            message:
+            "No se encontraron preguntas en submission.questions. Revisa el formato del payload de Fillout.",
+            rawBody: filloutData,
+        });
     }
 
-    if (!Array.isArray(responses) || responses.length === 0) {
-      console.warn("⚠️ No se encontraron preguntas en el payload de Fillout");
-      return res.status(400).json({
-        error: "No questions in payload",
-        message:
-          "No se encontraron preguntas en el body recibido desde Fillout. Revisa el formato del payload y el ID del campo.",
-        rawBody: filloutData,
-      });
-    }
 
     // Buscar el dominio
     const domainQuestion = responses.find(
